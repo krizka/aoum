@@ -7,34 +7,35 @@ function replace() {
 
 function rep_quote() {
 	replace "$1" 's/\s'$2'/ ``/'
-	replace "$1" 's/'$2'([\., ?!\()])/'\'\''$1/'
+	replace "$1" 's/'$2'([\., ?!\()\n])?/'\'\''$1/'
 }
 
 NAME=`basename "$1" .txt`
-cp "$NAME.txt" "$NAME.tmp"
+TMP="$NAME.tmp"
+cp "$NAME.txt" $TMP
 
-replace "$NAME.tmp" 's/^\s*\* *(.*)\n+/\\people{$1}\n/'
-replace "$NAME.tmp" 's/^\s*\- *(.*)\n+/\\soul{\1}\n/'
-replace "$NAME.tmp" 's/^\s*\– *(.*)\n+/\\soul{\1}\n/'
+replace $TMP 's/^\s*\* *(.*)\n+/\\people{$1}\n/'
+replace $TMP 's/^\s*\- *(.*)\n+/\\soul{\1}\n/'
+replace $TMP 's/^\s*\– *(.*)\n+/\\soul{\1}\n/'
 
-rep_quote "$NAME.tmp" \"
-rep_quote "$NAME.tmp" \”
-rep_quote "$NAME.tmp" \“
+rep_quote $TMP \"
+rep_quote $TMP \”
+rep_quote $TMP \“
 
 
-#replace "$NAME.tmp" 's/\s"/ ``/'
-#replace "$NAME.tmp" 's/"([\., ?!])/'\'\''$1/'
+#replace $TMP 's/\s"/ ``/'
+#replace $TMP 's/"([\., ?!])/'\'\''$1/'
 
-#replace "$NAME.tmp" 's/”([\., ?!])/'\'\''$1/'
-#replace "$NAME.tmp" 's/\s”/ ``/'
+#replace $TMP 's/”([\., ?!])/'\'\''$1/'
+#replace $TMP 's/\s”/ ``/'
 
-#replace "$NAME.tmp" 's/\s“/ ``/'
-#replace "$NAME.tmp" 's/“([\., ?!])/'\'\''$1/'
+#replace $TMP 's/\s“/ ``/'
+#replace $TMP 's/“([\., ?!])/'\'\''$1/'
 
-replace "$NAME.tmp" 's/»/'\'\''/'
-replace "$NAME.tmp" 's/«/``/'
+replace $TMP 's/»/'\'\''/'
+replace $TMP 's/«/``/'
 
-replace "$NAME.tmp" 's/…/.../'
-replace "$NAME.tmp" 's/^\n//'
+replace $TMP 's/…/.../'
+replace $TMP 's/^\n//'
 
-mv "$NAME.tmp" "$NAME.tex"
+mv $TMP "ready/$NAME.tex"
